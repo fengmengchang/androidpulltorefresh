@@ -103,7 +103,7 @@ public class HeaderFooterGridView extends GridView {
         ListAdapter adapter = getAdapter();
         if (adapter != null && adapter instanceof HeaderViewGridAdapter) {
             ((HeaderViewGridAdapter) adapter).setNumColumns(getNumColumnsCompatible());
-            ((HeaderViewGridAdapter) adapter).setRowHeight(getRowHeight());
+//            ((HeaderViewGridAdapter) adapter).setRowHeight(getRowHeight());
         }
     }
 
@@ -360,33 +360,33 @@ public class HeaderFooterGridView extends GridView {
         return value;
     }
 
-    public int getRowHeight() {
-        if (mRowHeight > 0) {
-            return mRowHeight;
-        }
-        ListAdapter adapter = getAdapter();
-        int numColumns = getNumColumnsCompatible();
-
-        // adapter has not been set or has no views in it;
-        if (adapter == null || adapter.getCount() <= numColumns * (mHeaderViewInfos.size() + mFooterViewInfos.size())) {
-            return -1;
-        }
-        int mColumnWidth = getColumnWidthCompatible();
-        View view = getAdapter().getView(numColumns * mHeaderViewInfos.size(), mViewForMeasureRowHeight, this);
-        AbsListView.LayoutParams p = (AbsListView.LayoutParams) view.getLayoutParams();
-        if (p == null) {
-            p = new AbsListView.LayoutParams(-1, -2, 0);
-            view.setLayoutParams(p);
-        }
-        int childHeightSpec = getChildMeasureSpec(
-                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED), 0, p.height);
-        int childWidthSpec = getChildMeasureSpec(
-                MeasureSpec.makeMeasureSpec(mColumnWidth, MeasureSpec.EXACTLY), 0, p.width);
-        view.measure(childWidthSpec, childHeightSpec);
-        mViewForMeasureRowHeight = view;
-        mRowHeight = view.getMeasuredHeight();
-        return mRowHeight;
-    }
+//    public int getRowHeight() {
+//        if (mRowHeight > 0) {
+//            return mRowHeight;
+//        }
+//        ListAdapter adapter = getAdapter();
+//        int numColumns = getNumColumnsCompatible();
+//
+//        // adapter has not been set or has no views in it;
+//        if (adapter == null || adapter.getCount() <= numColumns * (mHeaderViewInfos.size() + mFooterViewInfos.size())) {
+//            return -1;
+//        }
+//        int mColumnWidth = getColumnWidthCompatible();
+//        View view = getAdapter().getView(numColumns * mHeaderViewInfos.size(), mViewForMeasureRowHeight, this);
+//        AbsListView.LayoutParams p = (AbsListView.LayoutParams) view.getLayoutParams();
+//        if (p == null) {
+//            p = new AbsListView.LayoutParams(-1, -2, 0);
+//            view.setLayoutParams(p);
+//        }
+//        int childHeightSpec = getChildMeasureSpec(
+//                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED), 0, p.height);
+//        int childWidthSpec = getChildMeasureSpec(
+//                MeasureSpec.makeMeasureSpec(mColumnWidth, MeasureSpec.EXACTLY), 0, p.width);
+//        view.measure(childWidthSpec, childHeightSpec);
+//        mViewForMeasureRowHeight = view;
+//        mRowHeight = view.getMeasuredHeight();
+//        return mRowHeight;
+//    }
 
     @TargetApi(11)
     public void tryToScrollToBottomSmoothly() {
@@ -417,7 +417,7 @@ public class HeaderFooterGridView extends GridView {
             if (numColumns > 1) {
                 headerViewGridAdapter.setNumColumns(numColumns);
             }
-            headerViewGridAdapter.setRowHeight(getRowHeight());
+//            headerViewGridAdapter.setRowHeight(getRowHeight());
             super.setAdapter(headerViewGridAdapter);
         } else {
             super.setAdapter(adapter);
@@ -527,9 +527,9 @@ public class HeaderFooterGridView extends GridView {
             }
         }
 
-        public void setRowHeight(int height) {
-            mRowHeight = height;
-        }
+//        public void setRowHeight(int height) {
+//            mRowHeight = height;
+//        }
 
         public int getHeadersCount() {
             return mHeaderViewInfos.size();
@@ -692,13 +692,6 @@ public class HeaderFooterGridView extends GridView {
             // Header (negative positions will throw an ArrayIndexOutOfBoundsException)
             int numHeadersAndPlaceholders = getHeadersCount() * mNumColumns;
             if (position < numHeadersAndPlaceholders) {
-            	
-            	/***
-            	 * modify by fengmengchang
-            	 */
-            	if(position==-1){
-            		position =0;
-            	}
                 View headerViewContainer = mHeaderViewInfos
                         .get(position / mNumColumns).viewContainer;
                 if (position % mNumColumns == 0) {
