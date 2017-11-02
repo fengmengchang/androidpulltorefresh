@@ -75,6 +75,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 	private float mInitialMotionX, mInitialMotionY;
 
 	private boolean mIsBeingDragged = false;
+	private boolean isSingleView;
 	private State mState = State.RESET;
 	private Mode mMode = Mode.getDefault();
 
@@ -126,7 +127,13 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 		mLoadingAnimationStyle = animStyle;
 		init(context, null);
 	}
+	public boolean isSingleView() {
+		return isSingleView;
+	}
 
+	public void setSingleView(boolean isSingleView) {
+		this.isSingleView = isSingleView;
+	}
 	@Override
 	public void addView(View child, int index, ViewGroup.LayoutParams params) {
 		if (DEBUG) {
@@ -322,9 +329,21 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 		if (event.getAction() == MotionEvent.ACTION_DOWN && event.getEdgeFlags() != 0) {
 			return false;
 		}
-
+		float currentY = event.getY();
 		switch (event.getAction()) {
 			case MotionEvent.ACTION_MOVE: {
+				if (isSingleView) {
+					mIsBeingDragged = true;
+					if (mLastMotionY - currentY <= 0) {
+						if (mMode == Mode.BOTH) {
+							mCurrentMode = Mode.PULL_FROM_START;
+						}
+					} else {
+						if (mMode == Mode.BOTH) {
+							mCurrentMode = Mode.PULL_FROM_END;
+						}
+					}
+				}
 				if (mIsBeingDragged) {
 					mLastMotionY = event.getY();
 					mLastMotionX = event.getX();
